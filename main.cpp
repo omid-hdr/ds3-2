@@ -33,7 +33,7 @@ vector<pair<int, int>> getNeighbor(pair<int, int> s) {
 }
 
 
-void bfs(pair<int, int> source, int root) {
+void bfs(pair<int, int> source, int root) { // find path
     int dist = 0;
     map[source.first][source.second].distance[root] = dist;
     deque<pair<int, int> > dq;
@@ -52,26 +52,19 @@ void bfs(pair<int, int> source, int root) {
             } else if (map[itr.first][itr.second].type == '*' && map[itr.first][itr.second].distance[root] == 100000) {
                 map[itr.first][itr.second].distance[root] = dist + 1;
                 map[itr.first][itr.second].road[root] = s;
-                if (itr.first == 2 && itr.second == 8 && root == 1)
-                    cout << s.first << " " << s.second;
                 dq.push_back(itr);
             }
         }
     }
 }
 
-void rowing(int i, int j, int root, char look) {
+void rowing(int i, int j, int root, char look) { // cleaning road
     while (map[i][j].type != look) {
         if (map[i][j].type == '*')
             map[i][j].type = 'o';
-        if (root == 1)
-            cout << i << " " << j << endl;
-        if (map[i][j].distance[root] == 0) {
-            break;
-        }
-            cout << i << " " << j << endl;
+        int I = i;
         i = map[i][j].road[root].first;
-        j = map[i][j].road[root].second;
+        j = map[I][j].road[root].second;
     }
 }
 
@@ -92,13 +85,13 @@ int main() {
         }
     }
 
-    //////////////////////////////
+    ////////////find roads////////
 
     bfs(A, 0);
     bfs(B, 1);
     bfs(C, 2);
 
-    //////////////////////////////
+    ////////find best path////////
 
     int min = 100000;
     pair<int, int> minBlock;
@@ -114,18 +107,20 @@ int main() {
         }
     }
 
-    //////////////////////////////
+    /////////output answer/////////
 
     if (min < 100000) {
         cout << min << endl;
+
         int i = minBlock.first;
         int j = minBlock.second;
+
         rowing(i, j, 0, 'A');
-        cout << 'A';
+
         rowing(i, j, 1, 'B');
-        cout << 'A';
+
         rowing(i, j, 2, 'C');
-        cout << 'A';
+
         printMap();
     } else cout << "CHRISTMAS RUINED!";
 
