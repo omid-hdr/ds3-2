@@ -13,6 +13,23 @@ struct block {
 } map[505][505];
 
 
+pair<int, pair<int, int>> calculateMin() {
+    int min = 100000;
+    int distances;
+    pair<int, pair<int, int>> minBlock;
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            distances = map[i][j].distance[0] + map[i][j].distance[1] + map[i][j].distance[2];
+            if (map[i][j].type == '*') distances -= 2;
+            if (min > distances) {
+                min = distances;
+                minBlock = make_pair(min, make_pair(i, j));
+            }
+        }
+    }
+    return minBlock;
+}
+
 void printMap() {
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < m; ++j) {
@@ -68,6 +85,23 @@ void rowing(int i, int j, int root, char look) { // cleaning road
     }
 }
 
+void result(pair<int, pair<int, int>> minBlock) {
+    if (minBlock.first < 100000) {
+        cout << minBlock.first << endl;
+
+        int i = minBlock.second.first;
+        int j = minBlock.second.second;
+
+        rowing(i, j, 0, 'A');
+
+        rowing(i, j, 1, 'B');
+
+        rowing(i, j, 2, 'C');
+
+        printMap();
+    } else cout << "CHRISTMAS RUINED!";
+}
+
 int main() {
     /////////// input ////////////
     cin >> n >> m;
@@ -77,7 +111,7 @@ int main() {
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < m; ++j) {
             cin >> map[i][j].type;
-            if (map[i][j].type != '.' && map[i][j].type != '*') {
+            if (map[i][j].type != '.' && map[i][j].type != '*' && map[i][j].type != '#') {
                 if (map[i][j].type == 'A') A = make_pair(i, j);
                 else if (map[i][j].type == 'B') B = make_pair(i, j);
                 else C = make_pair(i, j);
@@ -93,36 +127,11 @@ int main() {
 
     ////////find best path////////
 
-    int min = 100000;
-    pair<int, int> minBlock;
-    int distances;
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < m; ++j) {
-            distances = map[i][j].distance[0] + map[i][j].distance[1] + map[i][j].distance[2];
-            if (map[i][j].type == '*') distances -= 2;
-            if (min > distances) {
-                min = distances;
-                minBlock = make_pair(i, j);
-            }
-        }
-    }
+    pair<int, pair<int, int>> minBlock = calculateMin();
 
     /////////output answer/////////
 
-    if (min < 100000) {
-        cout << min << endl;
-
-        int i = minBlock.first;
-        int j = minBlock.second;
-
-        rowing(i, j, 0, 'A');
-
-        rowing(i, j, 1, 'B');
-
-        rowing(i, j, 2, 'C');
-
-        printMap();
-    } else cout << "CHRISTMAS RUINED!";
+    result(minBlock);
 
     return 0;
 }
