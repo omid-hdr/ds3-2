@@ -16,7 +16,7 @@ struct block {
 pair<int, pair<int, int>> calculateMin() {
     int min = 100000;
     int distances;
-    pair<int, pair<int, int>> minBlock;
+    pair<int, pair<int, int>> minBlock = make_pair(min, make_pair(0, 0));;
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < m; ++j) {
             distances = map[i][j].distance[0] + map[i][j].distance[1] + map[i][j].distance[2];
@@ -135,3 +135,25 @@ int main() {
 
     return 0;
 }
+
+/* sample input:
+18 15
+#**..*##*#**##*
+*A##.**#.*.#**#
+**.#*****#*.###
+.**#*##*#.**###
+.#.*#**.#.*#*#B
+*.##*#**#***...
+.***##*#**.*.**
+###**#**#****.*
+.**.**#**##.**.
+**.*#*##**#***#
+***.*#*.#**#...
+##**.#****..**#
+#**.***.#*##***
+.*****#.***##**
+*..#.*#.#***.#*
+#****#.**..****
+*#**#*#*...*.*#
+*.**.C*.##*....
+ */
